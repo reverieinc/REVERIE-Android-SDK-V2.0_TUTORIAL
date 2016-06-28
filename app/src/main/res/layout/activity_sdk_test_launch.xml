@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefff">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#484848"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="15dp"
+                android:gravity="center"
+                android:layout_marginBottom="20dp"
+                android:text="SDK V2.0 TUTORIAL"/>
+
+            <TextView
+                android:id="@+id/lmLinkTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#dedede"
+                android:textColor="#202020"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:layout_margin="15dp"
+                android:gravity="left"
+                android:text="License Validation"
+                android:visibility="gone"/>
+
+
+            <TextView
+                android:id="@+id/downloadManagerLinkTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#dedede"
+                android:textColor="#202020"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:layout_margin="15dp"
+                android:gravity="left"
+                android:text="Download Manager"
+                android:visibility="gone"/>
+
+
+            <TextView
+                android:id="@+id/keypadLinkTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#dedede"
+                android:textColor="#202020"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:layout_margin="15dp"
+                android:gravity="left"
+                android:text="Keypad"/>
+
+            <TextView
+                android:id="@+id/uiLinkTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#dedede"
+                android:textColor="#202020"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:layout_margin="15dp"
+                android:gravity="left"
+                android:text="UI Components"/>
+
+            <TextView
+                android:id="@+id/transLocalLinkTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#dedede"
+                android:textColor="#202020"
+                android:textSize="16sp"
+                android:padding="10dp"
+                android:layout_margin="15dp"
+                android:gravity="left"
+                android:text="Transliteration/Localisation"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

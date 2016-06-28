@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#efefff"
+    android:orientation="vertical"
+    >
+
+    <com.reverie.customcomponent.RevEditText
+        android:id="@+id/testRevEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:hint=""
+        custom:localize="true"/>
+
+
+    <com.reverie.customcomponent.RevEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:hint=""
+        android:inputType="phone"
+        />
+
+    <ImageView
+        android:id="@+id/changeLang"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:src="@android:drawable/arrow_down_float"/>
+
+    <ListView
+        android:id="@+id/langSelectLV"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/changeLang"
+        android:layout_margin="10dp"
+        android:divider="#cdcdcd"
+        android:dividerHeight="1dp"
+        android:visibility="gone">
+
+    </ListView>
+
+
+
+</LinearLayout>

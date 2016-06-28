@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#dedede"
+        android:textColor="#202020"
+        android:textSize="18sp"
+        android:padding="10dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="Localisation/Transliteration"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/localTransOutRL"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Input Text:"
+                            android:textSize="16sp"
+                            android:textColor="#565656"
+                            android:padding="10dp"/>
+
+                        <com.reverie.customcomponent.RevEditText
+                            android:id="@+id/localTransInputET"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textSize="14sp"
+                            android:textColor="#202020"
+                            android:textColorHint="#ababab"
+                            android:padding="10dp"
+                            custom:localize="true"
+                            android:hint="For multiple use comma"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Source Language:"
+                            android:textSize="16sp"
+                            android:textColor="#565656"
+                            android:padding="10dp"/>
+
+                        <Spinner
+                            android:id="@+id/sourceLangSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="10dp">
+
+                        </Spinner>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Target Language:"
+                            android:textSize="16sp"
+                            android:textColor="#565656"
+                            android:padding="10dp"/>
+
+                        <Spinner
+                            android:id="@+id/targetLangSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="10dp">
+
+                        </Spinner>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Local/Trans:"
+                            android:textSize="16sp"
+                            android:textColor="#565656"
+                            android:padding="10dp"/>
+
+                        <Spinner
+                            android:id="@+id/transTypeSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="10dp">
+
+                        </Spinner>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="5dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Domain:"
+                            android:textSize="16sp"
+                            android:textColor="#565656"
+                            android:padding="10dp"/>
+
+                        <Spinner
+                            android:id="@+id/domainTypeSpinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="10dp">
+
+                        </Spinner>
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:id="@+id/localTransSubmitTV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#282828"
+                        android:textColor="#ffffff"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:padding="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:text="Submit"/>
+
+                    <ProgressBar
+                        android:id="@+id/pb"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Result:"
+                        android:textSize="16sp"
+                        android:textColor="#565656"
+                        android:padding="10dp"/>
+
+
+                    <TextView
+                        android:id="@+id/localResultTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textIsSelectable="true"
+                        android:layout_margin="10dp"
+                        android:background="#efefff"
+                        android:textColor="#565656"
+                        android:textSize="16sp"
+                        android:padding="10dp"/>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/localTransStatusRL"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#99000000"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:layout_margin="20dp"
+                android:padding="20dp"
+                android:background="#efefff">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#202020"
+                    android:textSize="18sp"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:text="Validating License"/>
+
+                <ProgressBar
+                    android:id="@+id/pb1"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="visible"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:paddingLeft="10dp"
+                    android:textStyle="bold"
+                    android:textColor="#565656"
+                    android:text="Status"/>
+
+                <TextView
+                    android:id="@+id/statusKeypadLmTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:paddingLeft="10dp"
+                    android:textColor="#565656"
+                    android:text=""/>
+
+
+                <Button
+                    android:id="@+id/statusKeypadLmButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="10dp"
+                    android:layout_margin="10dp"
+                    android:text="OK"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+
+
+
+
+</LinearLayout>
