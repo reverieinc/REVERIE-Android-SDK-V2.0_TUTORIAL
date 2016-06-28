@@ -290,11 +290,12 @@ public class SdkTestLocalTrans extends Activity {
         final RevLocalization revLocalization = new RevLocalization(SdkTestLocalTrans.this);
         revLocalization.getLocalizedText(apiBaseUrl, inputStringArray, selectedDomainTypeId, selectedTargetLangId, selectedSourceLangId, new LocalizationHashmapListener() {
             @Override
-            public void onResult(int responseCode, String responseJson, HashMap<String, String> result) {
+            public void onResult(int responseCode, String responseJson, HashMap result) {
                 Log.d("TAG", "LOCALISATION : ON RESULT >>>> ");
                 pb.setVisibility(View.GONE);
                 if(result != null) {
-                    for (Map.Entry<String,String> entry : result.entrySet()) {
+                    HashMap<String, String> resulthashmap = result;
+                    for (Map.Entry<String,String> entry : resulthashmap.entrySet()) {
                         String key = entry.getKey();
                         String value = entry.getValue();
                         Log.d("TAG", "KEY: " + key + " , VALUE: " + value);
@@ -323,11 +324,12 @@ public class SdkTestLocalTrans extends Activity {
         final RevTransliterationOnline revTransliteration_online = new RevTransliterationOnline(SdkTestLocalTrans.this);
         revTransliteration_online.getTransliteratedText(apiBaseUrl, inputStringArray, selectedDomainTypeId, selectedTargetLangId, selectedSourceLangId, new SimpleTransliterationListener() {
             @Override
-            public void onResult(int responseCode, String responseJson, HashMap<String, String> result) {
+            public void onResult(int responseCode, String responseJson, HashMap result) {
                 Log.d("TAG", "TRANSILETARATION : ON RESULT >>>> ");
                 pb.setVisibility(View.GONE);
                 if(result != null) {
-                    for (Map.Entry<String,String> entry : result.entrySet()) {
+                    HashMap<String, String> resulthashmap = result;
+                    for (Map.Entry<String,String> entry : resulthashmap.entrySet()) {
                         String key = entry.getKey();
                         String value = entry.getValue();
                         Log.d("TAG", "KEY: " + key + " , VALUE: " + value);
@@ -353,12 +355,13 @@ public class SdkTestLocalTrans extends Activity {
         final RevTransliterationOnline revTransliteration_online = new RevTransliterationOnline(SdkTestLocalTrans.this);
         revTransliteration_online.getSuggestedText(apiBaseUrl, input, selectedDomainTypeId, selectedTargetLangId, selectedSourceLangId, suggestionLimit, new SimpleSuggestionListener() {
             @Override
-            public void onResult(int responseCode, String responseJson, ArrayList<String> result) {
+            public void onResult(int responseCode, String responseJson, ArrayList result) {
                 Log.d("TAG", "TRANSILETARATION SUGGESTION: ON RESULT >>>> ");
                 pb.setVisibility(View.GONE);
 
                 if(result != null) {
-                    for(String s : result) {
+                    ArrayList<String> resultArraylist = result;
+                    for(String s : resultArraylist) {
                         resultLocalTrans = resultLocalTrans + s + ", ";
                     }
                 }

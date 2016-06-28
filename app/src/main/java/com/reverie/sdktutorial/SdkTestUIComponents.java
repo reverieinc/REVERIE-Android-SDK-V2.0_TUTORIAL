@@ -156,14 +156,6 @@ public class SdkTestUIComponents extends Activity {
         }
         else {
             showDownloadResourceConfirmDialog();
-            /*
-            RevSDK.downloadResources(SdkTestUIComponents.this, selectedLangId, new DownloadCompleteListener() {
-                @Override
-                public void onDownloadComplete(int langCode, boolean font, boolean dict, RevError errorMsg) {
-                    Log.d("TAG", "DOWNLOAD COMPLETE KEYPAD:  "+ langCode + " , " + font + ", " + dict + ", " + errorMsg.getErrorMessage());
-                }
-            });
-            */
         }
     }
 
