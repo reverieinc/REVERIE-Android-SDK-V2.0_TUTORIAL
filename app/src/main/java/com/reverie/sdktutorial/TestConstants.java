@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class TestConstants {
 
     public static final String SDK_TEST_APP_ID = "com.sdktest";
-    public static final String SDK_TEST_API_KEY = "5ytz6LvbMwj3WWT27jbb4CxdUdF1zXOqe4nq";
+    public static final String SDK_TEST_API_KEY = "3ZsjdNhiZcXXs3tP4OHjzJAPXJM0yojqxzyi";
 
 
     public static final String LM_API_BASE_URL = "http://137.135.43.145:80";
