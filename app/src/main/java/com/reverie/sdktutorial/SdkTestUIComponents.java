@@ -23,6 +23,7 @@ import com.reverie.customcomponent.RevEditText;
 import com.reverie.customcomponent.RevRadioButton;
 import com.reverie.customcomponent.RevTextView;
 import com.reverie.customcomponent.RevToggleButton;
+import com.reverie.lm.LM;
 import com.reverie.manager.DownloadCompleteListener;
 import com.reverie.manager.RevError;
 import com.reverie.manager.RevSDK;
@@ -38,10 +39,10 @@ public class SdkTestUIComponents extends Activity {
     private int selectedLangId = 0;
     private String selectedLangName = "";
 
-    private RelativeLayout uiComponentsRL, uiLMStatusRL, downloadStatusRL;
-    private TextView statusKeypadLmTV, statusDownlaodResourceTV;
-    private Button statusKeypadLmButton, statusDownlaodResourceButton;
-    private ProgressBar pb, pb1;
+    private RelativeLayout uiComponentsRL, downloadStatusRL;
+    private TextView statusDownlaodResourceTV;
+    private Button statusDownlaodResourceButton;
+    private ProgressBar pb1;
 
 
     private TextView uiResetTV, uiSetTV;
@@ -61,13 +62,9 @@ public class SdkTestUIComponents extends Activity {
         setContentView(R.layout.activity_sdk_test_components);
 
         uiComponentsRL = (RelativeLayout) findViewById(R.id.uiComponentsRL);
-        uiLMStatusRL = (RelativeLayout) findViewById(R.id.uiLMStatusRL);
         downloadStatusRL = (RelativeLayout) findViewById(R.id.downloadStatusRL);
-        statusKeypadLmTV = (TextView) findViewById(R.id.statusKeypadLmTV);
         statusDownlaodResourceTV = (TextView) findViewById(R.id.statusDownlaodResourceTV);
-        statusKeypadLmButton = (Button) findViewById(R.id.statusKeypadLmButton);
         statusDownlaodResourceButton = (Button) findViewById(R.id.statusDownlaodResourceButton);
-        pb = (ProgressBar) findViewById(R.id.pb);
         pb1 = (ProgressBar) findViewById(R.id.pb1);
 
         uiSetTV = (TextView) findViewById(R.id.uiSetTV);
@@ -82,44 +79,28 @@ public class SdkTestUIComponents extends Activity {
         componentLangSpinner = (Spinner) findViewById(R.id.componentLangSpinner);
 
         uiComponentsRL.setVisibility(View.GONE);
-        uiLMStatusRL.setVisibility(View.VISIBLE);
 
-        RevSDK.validateKey(TestConstants.LM_API_BASE_URL, SdkTestUIComponents.this, TestConstants.SDK_TEST_API_KEY, TestConstants.SDK_TEST_APP_ID, new ValidationCompleteListener() {
+        uiComponentsRL.setVisibility(View.VISIBLE);
+
+        initLanguageSpinner();
+
+        uiSetTV.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onValiodationComplete(int statusCode, String statusMessage) {
-                Log.d("TAG" , "LICENSE VALIDATION COMPLETE : " + statusCode + " ," + statusMessage);
-                pb.setVisibility(View.GONE);
-                statusKeypadLmTV.setText("Response code : " + statusCode + "\n" + "Response message : " + statusMessage);
+            public void onClick(View v) {
+                String input = uiInputET.getText().toString();
+                if(input != null && !input.isEmpty()) {
+                    setUIComponents(input);
+                }
+                else {
+                    Toast.makeText(SdkTestUIComponents.this, "Enter text to set components", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        statusKeypadLmButton.setOnClickListener(new View.OnClickListener() {
+        uiResetTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uiComponentsRL.setVisibility(View.VISIBLE);
-                uiLMStatusRL.setVisibility(View.GONE);
-
-                initLanguageSpinner();
-
-                uiSetTV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String input = uiInputET.getText().toString();
-                        if(input != null && !input.isEmpty()) {
-                            setUIComponents(input);
-                        }
-                        else {
-                            Toast.makeText(SdkTestUIComponents.this, "Enter text to set components", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-
-                uiResetTV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        resetUIComponents();
-                    }
-                });
+                resetUIComponents();
             }
         });
     }
@@ -178,12 +159,13 @@ public class SdkTestUIComponents extends Activity {
                 .show();
     }
 
+
     public void downloadLangresource() {
         statusDownlaodResourceTV.setText("");
         downloadStatusRL.setVisibility(View.VISIBLE);
         pb1.setVisibility(View.VISIBLE);
 
-        RevSDK.downloadResources(SdkTestUIComponents.this, selectedLangId, new DownloadCompleteListener() {
+        RevSDK.downloadResources(SdkTestUIComponents.this, TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedLangId, new DownloadCompleteListener() {
             @Override
             public void onDownloadComplete(int langCode, boolean font, boolean dict, RevError errorMsg) {
                 Log.d("TAG", "DOWNLOAD COMPLETE KEYPAD:  "+ langCode + " , " + font + ", " + dict + ", " + errorMsg.getErrorMessage());
@@ -200,9 +182,9 @@ public class SdkTestUIComponents extends Activity {
                         downloadStatusRL.setVisibility(View.GONE);
                     }
                 });
-
             }
         });
+
     }
 
 

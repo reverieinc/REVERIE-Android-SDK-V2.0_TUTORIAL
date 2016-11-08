@@ -7,12 +7,17 @@ import java.util.ArrayList;
  */
 public class TestConstants {
 
+
     public static final String SDK_TEST_APP_ID = "com.sdktest";
-    public static final String SDK_TEST_API_KEY = "3ZsjdNhiZcXXs3tP4OHjzJAPXJM0yojqxzyi";
+    public static final String SDK_TEST_API_KEY = "Mi0gQLEoLXhn70yrrVyh2ti5AYGgFhwGwLWZ";
 
+    public static final String LM_BASE_API_URL = "https://api-revup.reverieinc.com/apiman-gateway/Reverie/laaslm/1.0/Devices";
+    public static final String RESOURCE_DOWNLOAD_BASE_API_URL =  "http://52.187.52.246/web";
 
-    public static final String LM_API_BASE_URL = "http://137.135.43.145:80";
-    public static final String LOCAL_TRANS_BASE_URL = "http://api.revup.reverieinc.com/v2";
+    public static final String REVUP_LOCALIZATION_API_ENDPOINT = "https://api-revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk/localization/1.0";
+    public static final String REVUP_TRANSLITERATION_API_ENDPOINT = "https://api-revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk/transliteration/1.0";
+    public static final String REVUP_SEARCH_API_ENDPOINT = "https://api-revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk/search/1.0";
+
 
     public static final int Server_Lang_Hindi=0;
     public static final int Server_Lang_Gujarati=1;

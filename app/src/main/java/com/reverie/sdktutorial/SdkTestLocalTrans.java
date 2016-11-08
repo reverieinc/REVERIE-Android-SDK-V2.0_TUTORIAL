@@ -15,12 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.reverie.customcomponent.RevEditText;
-import com.reverie.localization.LocalizationHashmapListener;
+import com.reverie.lm.LM;
 import com.reverie.localization.RevLocalization;
+import com.reverie.localization.SimpleLocalizationListener;
 import com.reverie.manager.DownloadCompleteListener;
 import com.reverie.manager.RevError;
 import com.reverie.manager.RevSDK;
 import com.reverie.manager.ValidationCompleteListener;
+import com.reverie.search.SearchAssistListener;
 import com.reverie.transliterationsonline.RevTransliterationOnline;
 import com.reverie.transliterationsonline.SimpleSuggestionListener;
 import com.reverie.transliterationsonline.SimpleTransliterationListener;
@@ -35,10 +37,7 @@ import java.util.Map;
  */
 public class SdkTestLocalTrans extends Activity {
 
-    private RelativeLayout localTransOutRL, localTransStatusRL;
-    private TextView statusKeypadLmTV;
-    private Button statusKeypadLmButton;
-    private ProgressBar pb1;
+    private RelativeLayout localTransOutRL;
 
     private RevEditText localTransInputET;
     private Spinner sourceLangSpinner, targetLangSpinner, transTypeSpinner, domainTypeSpinner;
@@ -68,11 +67,6 @@ public class SdkTestLocalTrans extends Activity {
         setContentView(R.layout.activity_sdk_test_local_trans);
 
         localTransOutRL = (RelativeLayout) findViewById(R.id.localTransOutRL);
-        localTransStatusRL = (RelativeLayout) findViewById(R.id.localTransStatusRL);
-        statusKeypadLmTV = (TextView) findViewById(R.id.statusKeypadLmTV);
-        statusKeypadLmButton = (Button) findViewById(R.id.statusKeypadLmButton);
-        pb1 = (ProgressBar) findViewById(R.id.pb1);
-
         localTransInputET = (RevEditText) findViewById(R.id.localTransInputET);
         sourceLangSpinner = (Spinner) findViewById(R.id.sourceLangSpinner);
         targetLangSpinner = (Spinner) findViewById(R.id.targetLangSpinner);
@@ -83,31 +77,10 @@ public class SdkTestLocalTrans extends Activity {
         pb = (ProgressBar) findViewById(R.id.pb);
 
 
-        localTransOutRL.setVisibility(View.GONE);
-        localTransStatusRL.setVisibility(View.VISIBLE);
-
-        RevSDK.validateKey(TestConstants.LM_API_BASE_URL, SdkTestLocalTrans.this, TestConstants.SDK_TEST_API_KEY, TestConstants.SDK_TEST_APP_ID, new ValidationCompleteListener() {
-            @Override
-            public void onValiodationComplete(int statusCode, String statusMessage) {
-                Log.d("TAG" , "LICENSE VALIDATION COMPLETE : " + statusCode + " ," + statusMessage);
-                pb1.setVisibility(View.GONE);
-                statusKeypadLmTV.setText("Response code : " + statusCode + "\n" + "Response message : " + statusMessage);
-            }
-        });
-
-        statusKeypadLmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                localTransOutRL.setVisibility(View.VISIBLE);
-                localTransStatusRL.setVisibility(View.GONE);
-
-                initLanguageSpinner();
-                initTransTypeSpinner();
-                initDomainSpinner();
-
-            }
-        });
-
+        localTransOutRL.setVisibility(View.VISIBLE);
+        initLanguageSpinner();
+        initTransTypeSpinner();
+        initDomainSpinner();
 
         localTransSubmitTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +126,7 @@ public class SdkTestLocalTrans extends Activity {
     }
 
     public void initTransTypeSpinner() {
-        final String[] transTypeArray = new String[]{"Localisation", "Transliteration", "Suggestion"};
+        final String[] transTypeArray = new String[]{"Localisation", "Transliteration", "Suggestion", "Search"};
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, transTypeArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         transTypeSpinner.setAdapter(spinnerArrayAdapter);
@@ -210,27 +183,32 @@ public class SdkTestLocalTrans extends Activity {
             }
             else if(selectedTransTypeId == 3) {
                 localTransInputET.setHint("Enter text");
+                ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, domainNameTransliterationArray);
+                spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                domainTypeSpinner.setAdapter(spinnerArrayAdapter);
+
+                domainTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long id) {
+                        selectedDomainTypeId = domainIdTransliterationArray[pos];
+                        selectedDomainTypeName = domainNameTransliterationArray[pos];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> arg0) {
+
+                    }
+
+                });
+            }
+            else if(selectedTransTypeId == 4) {
+                // Search
+                localTransInputET.setHint("Enter text");
             }
 
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, domainNameTransliterationArray);
-            spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            domainTypeSpinner.setAdapter(spinnerArrayAdapter);
 
-            domainTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> arg0, View arg1, int pos, long id) {
-                    selectedDomainTypeId = domainIdTransliterationArray[pos];
-                    selectedDomainTypeName = domainNameTransliterationArray[pos];
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> arg0) {
-
-                }
-
-            });
         }
-
     }
 
     public void onSpinnerSourceLangSelected(int pos) {
@@ -243,12 +221,14 @@ public class SdkTestLocalTrans extends Activity {
             // Log.d("TAG", "RESOURCE AVAILABLE FOR : " + selectedSourceLangId );
         }
         else {
-            RevSDK.downloadResources(SdkTestLocalTrans.this, selectedSourceLangId, new DownloadCompleteListener() {
+            RevSDK.downloadResources(SdkTestLocalTrans.this, TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedSourceLangId, new DownloadCompleteListener() {
                 @Override
                 public void onDownloadComplete(int langCode, boolean font, boolean dict, RevError errorMsg) {
-                    //Log.d("TAG", "DOWNLOAD COMPLETE KEYPAD:  "+ langCode + " , " + font + ", " + dict + ", " + errorMsg.getErrorMessage());
+                    Log.d("TAG", "DOWNLOAD COMPLETE :  "+ langCode + " , " + font + ", " + dict + ", " + errorMsg.getErrorMessage());
+
                 }
             });
+
         }
     }
 
@@ -264,15 +244,19 @@ public class SdkTestLocalTrans extends Activity {
         if(inputText != null && !inputText.isEmpty()) {
             if(selectedTransTypeId == 1) {
                 // LOCALISATION
-                callLocalisationApi(inputText, TestConstants.LOCAL_TRANS_BASE_URL);
+                callLocalisationApi(inputText, TestConstants.REVUP_LOCALIZATION_API_ENDPOINT);
             }
             else if(selectedTransTypeId == 2) {
                 //TRANSILETARATION
-                callTransliterationApi(inputText, TestConstants.LOCAL_TRANS_BASE_URL);
+                callTransliterationApi(inputText, TestConstants.REVUP_TRANSLITERATION_API_ENDPOINT);
             }
             else if(selectedTransTypeId == 3) {
                 //TRANSILETARATION SUGGESTION
-                callTransliterationSuggestionApi(inputText, 5, TestConstants.LOCAL_TRANS_BASE_URL);
+                callTransliterationSuggestionApi(inputText, 5, TestConstants.REVUP_TRANSLITERATION_API_ENDPOINT);
+            }
+            else if(selectedTransTypeId == 4) {
+                // SEARCH ASSIST
+                callSearchAssistApi(inputText, TestConstants.REVUP_SEARCH_API_ENDPOINT);
             }
         }
         else {
@@ -280,22 +264,28 @@ public class SdkTestLocalTrans extends Activity {
         }
     }
 
+
     public void callLocalisationApi(String input, String apiBaseUrl) {
-        Log.d("TAG", "LOCALISATION : API CALLING >>>> ");
+        Log.d("TAG", "LOCALISATION : API CALLING >>>> " + apiBaseUrl);
         resultLocalTrans = "";
         localResultTV.setText("");
         pb.setVisibility(View.VISIBLE);
         String[] inputStringArray = input.split(",");
 
-        final RevLocalization revLocalization = new RevLocalization(SdkTestLocalTrans.this);
-        revLocalization.getLocalizedText(apiBaseUrl, inputStringArray, selectedDomainTypeId, selectedTargetLangId, selectedSourceLangId, new LocalizationHashmapListener() {
+
+        /**
+         *  getLocalizedText API returns localized text result for input text and provided target langauge via Reverie Server Network call
+         *  API : getLocalizedText
+         *  Params : Activity, Localization API Url(String), API key(String), App Id(String), Input text(String[]), Domain Id (int), Target Langauge Id (int), Source Langauge Id (int), SimpleLocalizationListener Callback
+         *  Callback : onResult(int responseCode, String responseJson, HashMap<String, String> result)
+         */
+        RevSDK.getLocalizedText(SdkTestLocalTrans.this, apiBaseUrl, TestConstants.SDK_TEST_API_KEY, TestConstants.SDK_TEST_APP_ID, inputStringArray, selectedDomainTypeId, selectedTargetLangId, selectedSourceLangId, new SimpleLocalizationListener() {
             @Override
-            public void onResult(int responseCode, String responseJson, HashMap result) {
+            public void onResult(int responseCode, String responseJson, HashMap<String, String> result) {
                 Log.d("TAG", "LOCALISATION : ON RESULT >>>> ");
                 pb.setVisibility(View.GONE);
                 if(result != null) {
-                    HashMap<String, String> resulthashmap = result;
-                    for (Map.Entry<String,String> entry : resulthashmap.entrySet()) {
+                    for (Map.Entry<String,String> entry : result.entrySet()) {
                         String key = entry.getKey();
                         String value = entry.getValue();
                         Log.d("TAG", "KEY: " + key + " , VALUE: " + value);
@@ -305,12 +295,12 @@ public class SdkTestLocalTrans extends Activity {
 
                 // DISPPLAY RESULT
                 Log.d("TAG", "LOCALISATION RESULT:" + responseCode + "," + responseJson);
+
                 localResultTV.setText("Response Code: " + responseCode + "\n" +
                         "Response Json: " + responseJson + "\n\n" +
                         "RESULT : " + resultLocalTrans);
             }
         });
-
     }
 
 
@@ -321,15 +311,19 @@ public class SdkTestLocalTrans extends Activity {
         pb.setVisibility(View.VISIBLE);
         String[] inputStringArray = input.split(",");
 
-        final RevTransliterationOnline revTransliteration_online = new RevTransliterationOnline(SdkTestLocalTrans.this);
-        revTransliteration_online.getTransliteratedText(apiBaseUrl, inputStringArray, selectedDomainTypeId, selectedTargetLangId, selectedSourceLangId, new SimpleTransliterationListener() {
+        /**
+         *  getTransliteratedText API returns Transliterated text result for input text and provided target langauge via Reverie Server Network call
+         *  API : getTransliteratedText
+         *  Params : Activity, Transaltion API Url(String), API key(String), App Id(String), Input text(String[]), Domain Id (int), Target Langauge Id (int), Source Langauge Id (int), SimpleTransliterationListener Callback
+         *  Callback : onResult(int responseCode, String responseJson, HashMap<String, String> result)
+         */
+        RevSDK.getTransliteratedText(SdkTestLocalTrans.this, apiBaseUrl, TestConstants.SDK_TEST_API_KEY, TestConstants.SDK_TEST_APP_ID,inputStringArray, selectedDomainTypeId, selectedTargetLangId, selectedSourceLangId, new SimpleTransliterationListener() {
             @Override
-            public void onResult(int responseCode, String responseJson, HashMap result) {
+            public void onResult(int responseCode, String responseJson, HashMap<String, String> result) {
                 Log.d("TAG", "TRANSILETARATION : ON RESULT >>>> ");
                 pb.setVisibility(View.GONE);
                 if(result != null) {
-                    HashMap<String, String> resulthashmap = result;
-                    for (Map.Entry<String,String> entry : resulthashmap.entrySet()) {
+                    for (Map.Entry<String,String> entry : result.entrySet()) {
                         String key = entry.getKey();
                         String value = entry.getValue();
                         Log.d("TAG", "KEY: " + key + " , VALUE: " + value);
@@ -339,12 +333,14 @@ public class SdkTestLocalTrans extends Activity {
 
                 // DISPPLAY RESULT
                 Log.d("TAG", "TRANSILETARATION RESULT:" + responseCode + "," + responseJson);
+
                 localResultTV.setText("Response Code: " + responseCode + "\n" +
                         "Response Json: " + responseJson + "\n\n" +
                         "RESULT : " + resultLocalTrans);
             }
         });
     }
+
 
     public void callTransliterationSuggestionApi(String input, int suggestionLimit, String apiBaseUrl) {
         Log.d("TAG", "TRANSILETARTION SUGGESTION: API CALLING >>>> ");
@@ -352,28 +348,62 @@ public class SdkTestLocalTrans extends Activity {
         localResultTV.setText("");
         pb.setVisibility(View.VISIBLE);
 
-        final RevTransliterationOnline revTransliteration_online = new RevTransliterationOnline(SdkTestLocalTrans.this);
-        revTransliteration_online.getSuggestedText(apiBaseUrl, input, selectedDomainTypeId, selectedTargetLangId, selectedSourceLangId, suggestionLimit, new SimpleSuggestionListener() {
+        /**
+         *  getSuggestedText API returns multiple Transliterated text result for input text and provided target langauge via Reverie Server Network call
+         *  API : getSuggestedText
+         *  Params : Activity, Transaltion API Url(String), API key(String), App Id(String), Input text(String), Domain Id (int), Target Langauge Id (int), Source Langauge Id (int), Number of suggestions (int), SimpleSuggestionListener Callback
+         *  Callback : onResult(int responseCode, String responseJson, ArrayList<String> result)
+         */
+        RevSDK.getSuggestedText(SdkTestLocalTrans.this, apiBaseUrl, TestConstants.SDK_TEST_API_KEY, TestConstants.SDK_TEST_APP_ID, input, selectedDomainTypeId, selectedTargetLangId, selectedSourceLangId, suggestionLimit, new SimpleSuggestionListener() {
             @Override
-            public void onResult(int responseCode, String responseJson, ArrayList result) {
+            public void onResult(int responseCode, String responseJson, ArrayList<String> result) {
                 Log.d("TAG", "TRANSILETARATION SUGGESTION: ON RESULT >>>> ");
                 pb.setVisibility(View.GONE);
 
                 if(result != null) {
-                    ArrayList<String> resultArraylist = result;
-                    for(String s : resultArraylist) {
+                    for(String s : result) {
                         resultLocalTrans = resultLocalTrans + s + ", ";
                     }
                 }
 
                 // DISPPLAY RESULT
                 Log.d("TAG", "TRANSILETARATION SUGGESTION RESULT:" + responseCode + "," + responseJson);
+
                 localResultTV.setText("Response Code: " + responseCode + "\n" +
                         "Response Json: " + responseJson + "\n\n" +
                         "RESULT : " + resultLocalTrans);
             }
         });
-
     }
+
+
+    /**
+     *  callSearchAssistApi API returns English text result for input localized text via Reverie Server Network call
+     *  API : getSearchAssistText
+     *  Params : Activity, Search Assist API Url(String), API key(String), App Id(String), Input text(String), Source Langauge Id (int), SearchAssistListener Callback
+     *  Callback : onResult(int responseCode, String responseJson, String result)
+     */
+    public void callSearchAssistApi(String input, String apiBaseUrl) {
+        Log.d("TAG", "SEARCH ASSIST: API CALLING >>>> ");
+        resultLocalTrans = "";
+        localResultTV.setText("");
+        pb.setVisibility(View.VISIBLE);
+
+        RevSDK.getSearchAssistText(SdkTestLocalTrans.this, apiBaseUrl, TestConstants.SDK_TEST_API_KEY, TestConstants.SDK_TEST_APP_ID, input, selectedSourceLangId, new SearchAssistListener() {
+            @Override
+            public void onResult(int responseCode, String responseJson, String result) {
+                Log.d("TAG", "SEARCH ASSIST : ON RESULT >>>> ");
+                pb.setVisibility(View.GONE);
+
+                // DISPPLAY RESULT
+                Log.d("TAG", "SEARCH ASSIST RESULT:" + responseCode + "," + responseJson);
+
+                localResultTV.setText("Response Code: " + responseCode + "\n" +
+                        "Response Json: " + responseJson + "\n\n" +
+                        "RESULT : " + result);
+            }
+        });
+    }
+
 
 }

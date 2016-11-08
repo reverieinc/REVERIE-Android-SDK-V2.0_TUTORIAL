@@ -8,7 +8,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/temp_app_icon"
+        android:icon="@mipmap/reverie_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -23,14 +23,6 @@
             </intent-filter>
 
         </activity>
-
-        <activity android:name="com.reverie.sdktutorial.SdkTestLM"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-
-        <activity android:name="com.reverie.sdktutorial.SdkTestDownloadResource"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateAlwaysHidden" />
 
         <activity android:name="com.reverie.sdktutorial.SdkTestKeypad"
             android:screenOrientation="portrait"

@@ -32,10 +32,10 @@ import java.util.ArrayList;
 public class SdkTestKeypad extends Activity {
 
     private Spinner keypadLangSpinner;
-    private RelativeLayout keypadEditTextRL, keypadStatusRL, downloadStatusRL;
-    private TextView statusKeypadLmTV, statusDownlaodResourceTV;
-    private Button statusKeypadLmButton, statusDownlaodResourceButton;
-    private ProgressBar pb, pb1;
+    private RelativeLayout keypadEditTextRL,downloadStatusRL;
+    private TextView statusDownlaodResourceTV;
+    private Button statusDownlaodResourceButton;
+    private ProgressBar pb1;
 
     private ArrayList<Lang> langList = new ArrayList<>();
     private int selectedLangId = 0;
@@ -50,37 +50,15 @@ public class SdkTestKeypad extends Activity {
 
         keypadLangSpinner = (Spinner) findViewById(R.id.keypadLangSpinner);
         keypadEditTextRL = (RelativeLayout) findViewById(R.id.keypadEditTextRL);
-        keypadStatusRL = (RelativeLayout) findViewById(R.id.keypadStatusRL);
         downloadStatusRL = (RelativeLayout) findViewById(R.id.downloadStatusRL);
-        statusKeypadLmTV = (TextView) findViewById(R.id.statusKeypadLmTV);
         statusDownlaodResourceTV = (TextView) findViewById(R.id.statusDownlaodResourceTV);
-        statusKeypadLmButton = (Button) findViewById(R.id.statusKeypadLmButton);
         statusDownlaodResourceButton = (Button) findViewById(R.id.statusDownlaodResourceButton);
-        pb = (ProgressBar) findViewById(R.id.pb);
         pb1 = (ProgressBar) findViewById(R.id.pb1);
 
 
-        keypadEditTextRL.setVisibility(View.GONE);
-        keypadStatusRL.setVisibility(View.VISIBLE);
+        keypadEditTextRL.setVisibility(View.VISIBLE);
+        initLanguageSpinner();
 
-        RevSDK.validateKey(TestConstants.LM_API_BASE_URL, SdkTestKeypad.this, TestConstants.SDK_TEST_API_KEY, TestConstants.SDK_TEST_APP_ID, new ValidationCompleteListener() {
-            @Override
-            public void onValiodationComplete(int statusCode, String statusMessage) {
-                Log.d("TAG" , "LICENSE VALIDATION COMPLETE : " + statusCode + " ," + statusMessage);
-                pb.setVisibility(View.GONE);
-                statusKeypadLmTV.setText("Response code : " + statusCode + "\n" + "Response message : " + statusMessage);
-            }
-        });
-
-        statusKeypadLmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keypadEditTextRL.setVisibility(View.VISIBLE);
-                keypadStatusRL.setVisibility(View.GONE);
-
-                initLanguageSpinner();
-            }
-        });
     }
 
 
@@ -107,11 +85,22 @@ public class SdkTestKeypad extends Activity {
     public void onSpinnerLangSelected(int pos) {
         selectedLangId = TestConstants.langIdsArray[pos];
         selectedLangName = TestConstants.langNamesArray[pos];
-        String str = TestConstants.langIdsArray[pos] + " , " + TestConstants.langNamesArray[pos];
-        //Toast.makeText(SdkTestKeypad.this, "Select Lang: " + str , Toast.LENGTH_SHORT).show();
 
+        /**
+         *  InitKeypad API parse the provided Activity and identify Custom component "RevEditText" to avail kepad.
+         *  API : initKeypad
+         *  Params : Activity, Langauge id
+         *  Return : boolean Status
+         */
         boolean status = RevSDK.initKeypad(SdkTestKeypad.this, selectedLangId);
 
+
+        /**
+         *  checkResources API checks availability of resources for provided language.
+         *  API : checkResources
+         *  Params : Activity, langauge Id
+         *  Return : boolean Status
+         */
         if(RevSDK.checkResource(SdkTestKeypad.this, selectedLangId)) {
             // do nothing, already available
             Log.d("TAG", "RESOURCE AVAILABLE FOR : " + selectedLangId );
@@ -141,14 +130,22 @@ public class SdkTestKeypad extends Activity {
                 .show();
     }
 
+
     public void downloadLangresource() {
         statusDownlaodResourceTV.setText("");
         downloadStatusRL.setVisibility(View.VISIBLE);
         pb1.setVisibility(View.VISIBLE);
 
-        RevSDK.downloadResources(SdkTestKeypad.this, selectedLangId, new DownloadCompleteListener() {
+        /**
+         *  downloadResources API downloads resources (font and dictionary) from Reverie Server for requested Langauge.
+         *  API : downloadResources
+         *  Params : Activity, Resource Doenload Api Url, Langauge id, DownloadCompleteListener callback
+         *  Callback : onDownloadComplete (int language code, boolean Font download status, boolean Dictionary download status, RevError Error Message
+         */
+        RevSDK.downloadResources(SdkTestKeypad.this, TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedLangId, new DownloadCompleteListener() {
             @Override
             public void onDownloadComplete(int langCode, boolean font, boolean dict, RevError errorMsg) {
+
                 Log.d("TAG", "DOWNLOAD COMPLETE KEYPAD:  "+ langCode + " , " + font + ", " + dict + ", " + errorMsg.getErrorMessage());
                 pb1.setVisibility(View.GONE);
                 String status =  "Language Code: " + langCode + "\n"
@@ -163,7 +160,6 @@ public class SdkTestKeypad extends Activity {
                         downloadStatusRL.setVisibility(View.GONE);
                     }
                 });
-
             }
         });
     }

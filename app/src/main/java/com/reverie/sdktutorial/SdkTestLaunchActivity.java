@@ -7,11 +7,17 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.reverie.manager.RevSDK;
+import com.reverie.manager.ValidationCompleteListener;
 import com.sdktest.R;
 
 /**
@@ -20,7 +26,11 @@ import com.sdktest.R;
 public class SdkTestLaunchActivity extends Activity {
 
     private static final int READ_PHONE_STATE_REQUEST_CODE = 101;
-    private TextView lmLinkTV, downloadManagerLinkTV, keypadLinkTV, uiLinkTV, transLocalLinkTV;
+    private TextView keypadLinkTV, uiLinkTV, transLocalLinkTV;
+    private RelativeLayout keypadStatusRL;
+    private TextView statusKeypadLmTV;
+    private Button statusKeypadLmButton;
+    private ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,39 +39,32 @@ public class SdkTestLaunchActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_sdk_test_launch);
 
-        lmLinkTV = (TextView) findViewById(R.id.lmLinkTV);
-        downloadManagerLinkTV = (TextView) findViewById(R.id.downloadManagerLinkTV);
         keypadLinkTV = (TextView) findViewById(R.id.keypadLinkTV);
         uiLinkTV = (TextView) findViewById(R.id.uiLinkTV);
         transLocalLinkTV = (TextView) findViewById(R.id.transLocalLinkTV);
+        keypadStatusRL = (RelativeLayout) findViewById(R.id.keypadStatusRL);
+        statusKeypadLmTV = (TextView) findViewById(R.id.statusKeypadLmTV);
+        statusKeypadLmButton = (Button) findViewById(R.id.statusKeypadLmButton);
+        pb = (ProgressBar) findViewById(R.id.pb);
+        keypadStatusRL.setVisibility(View.GONE);
 
 
         int phoneStatePermission = ContextCompat.checkSelfPermission(SdkTestLaunchActivity.this, Manifest.permission.READ_PHONE_STATE);
         if(phoneStatePermission == PackageManager.PERMISSION_GRANTED) {
-            // launch app menu
+           validateLicense();
         }
         else {
             ActivityCompat.requestPermissions(SdkTestLaunchActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE},READ_PHONE_STATE_REQUEST_CODE);
         }
 
 
-        /*
-        lmLinkTV.setOnClickListener(new View.OnClickListener() {
+        statusKeypadLmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SdkTestLaunchActivity.this, SdkTestLM.class);
-                startActivity(intent);
+                keypadStatusRL.setVisibility(View.GONE);
             }
         });
 
-        downloadManagerLinkTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SdkTestLaunchActivity.this, SdkTestDownloadResource.class);
-                startActivity(intent);
-            }
-        });
-        */
 
         keypadLinkTV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +100,7 @@ public class SdkTestLaunchActivity extends Activity {
             case READ_PHONE_STATE_REQUEST_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission granted
+                    validateLicense();
                 } else {
                     Toast.makeText(SdkTestLaunchActivity.this, "Permission Denied, Exit..", Toast.LENGTH_SHORT).show();
                     finish();
@@ -104,5 +108,27 @@ public class SdkTestLaunchActivity extends Activity {
                 return;
             }
         }
+    }
+
+
+    /**
+     *  License validation to be done once in application lifecycle.
+     *  Keypad initialization, Resource download should follow only after a successful License validation call.
+     */
+    public void validateLicense() {
+        keypadStatusRL.setVisibility(View.VISIBLE);
+
+        /** API : License validation
+         *  Params : Context, License validation base API url, License Key, App Id, ValidationCompleteListener Callback
+         *  Callback : onValidationComplete(int statusCode, String statusMessage)
+         */
+        RevSDK.validateKey(SdkTestLaunchActivity.this.getApplicationContext(), TestConstants.LM_BASE_API_URL, TestConstants.SDK_TEST_API_KEY, TestConstants.SDK_TEST_APP_ID, new ValidationCompleteListener() {
+            @Override
+            public void onValidationComplete(int statusCode, String statusMessage) {
+                Log.d("TAG" , "LICENSE VALIDATION COMPLETE : " + statusCode + " ," + statusMessage);
+                pb.setVisibility(View.GONE);
+                statusKeypadLmTV.setText("Response code : " + statusCode + "\n" + "Response message : " + statusMessage);
+            }
+        });
     }
 }
