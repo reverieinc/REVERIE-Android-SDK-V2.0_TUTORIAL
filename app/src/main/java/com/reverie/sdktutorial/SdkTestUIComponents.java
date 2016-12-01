@@ -131,7 +131,7 @@ public class SdkTestUIComponents extends Activity {
         //Toast.makeText(SdkTestKeypad.this, "Select Lang: " + str , Toast.LENGTH_SHORT).show();
 
         boolean status = RevSDK.initKeypad(SdkTestUIComponents.this, selectedLangId);
-        if(RevSDK.checkResource(SdkTestUIComponents.this, selectedLangId)) {
+        if(RevSDK.checkResource( selectedLangId)) {
             // do nothing, already available
             Log.d("TAG", "RESOURCE AVAILABLE FOR : " + selectedLangId );
         }
@@ -165,7 +165,7 @@ public class SdkTestUIComponents extends Activity {
         downloadStatusRL.setVisibility(View.VISIBLE);
         pb1.setVisibility(View.VISIBLE);
 
-        RevSDK.downloadResources(SdkTestUIComponents.this, TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedLangId, new DownloadCompleteListener() {
+        RevSDK.downloadResources(TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedLangId, new DownloadCompleteListener() {
             @Override
             public void onDownloadComplete(int langCode, boolean font, boolean dict, RevError errorMsg) {
                 Log.d("TAG", "DOWNLOAD COMPLETE KEYPAD:  "+ langCode + " , " + font + ", " + dict + ", " + errorMsg.getErrorMessage());

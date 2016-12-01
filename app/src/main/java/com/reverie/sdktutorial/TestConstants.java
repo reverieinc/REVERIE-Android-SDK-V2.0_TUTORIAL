@@ -8,11 +8,11 @@ import java.util.ArrayList;
 public class TestConstants {
 
 
-    public static final String SDK_TEST_APP_ID = "com.sdktest";
-    public static final String SDK_TEST_API_KEY = "Mi0gQLEoLXhn70yrrVyh2ti5AYGgFhwGwLWZ";
+    public static final String SDK_TEST_APP_ID = "com.XXXX";
+    public static final String SDK_TEST_API_KEY = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
 
-    public static final String LM_BASE_API_URL = "https://api-revup.reverieinc.com/apiman-gateway/Reverie/laaslm/1.0/Devices";
-    public static final String RESOURCE_DOWNLOAD_BASE_API_URL =  "http://52.187.52.246/web";
+    public static final String LM_BASE_API_URL = "http://beta.auth.revup.reverieinc.com/apiman-gateway";
+    public static final String RESOURCE_DOWNLOAD_BASE_API_URL =  "http://beta.auth.revup.reverieinc.com/apiman-gateway";
 
     public static final String REVUP_LOCALIZATION_API_ENDPOINT = "https://api-revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk/localization/1.0";
     public static final String REVUP_TRANSLITERATION_API_ENDPOINT = "https://api-revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk/transliteration/1.0";

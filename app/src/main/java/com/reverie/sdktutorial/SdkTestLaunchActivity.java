@@ -113,7 +113,7 @@ public class SdkTestLaunchActivity extends Activity {
 
     /**
      *  License validation to be done once in application lifecycle.
-     *  Keypad initialization, Resource download should follow only after a successful License validation call.
+     *  Resource download, Keypad initialization should follow only after a successful License validation call.
      */
     public void validateLicense() {
         keypadStatusRL.setVisibility(View.VISIBLE);

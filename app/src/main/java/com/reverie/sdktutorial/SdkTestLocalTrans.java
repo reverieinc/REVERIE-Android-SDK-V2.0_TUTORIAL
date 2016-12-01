@@ -216,12 +216,12 @@ public class SdkTestLocalTrans extends Activity {
         selectedSourceLangName = TestConstants.langNamesArray[pos];
 
         boolean status = RevSDK.initKeypad(SdkTestLocalTrans.this, selectedSourceLangId);
-        if(RevSDK.checkResource(SdkTestLocalTrans.this, selectedSourceLangId)) {
+        if(RevSDK.checkResource(selectedSourceLangId)) {
             // do nothing, already available
             // Log.d("TAG", "RESOURCE AVAILABLE FOR : " + selectedSourceLangId );
         }
         else {
-            RevSDK.downloadResources(SdkTestLocalTrans.this, TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedSourceLangId, new DownloadCompleteListener() {
+            RevSDK.downloadResources(TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedSourceLangId, new DownloadCompleteListener() {
                 @Override
                 public void onDownloadComplete(int langCode, boolean font, boolean dict, RevError errorMsg) {
                     Log.d("TAG", "DOWNLOAD COMPLETE :  "+ langCode + " , " + font + ", " + dict + ", " + errorMsg.getErrorMessage());
@@ -389,7 +389,7 @@ public class SdkTestLocalTrans extends Activity {
         localResultTV.setText("");
         pb.setVisibility(View.VISIBLE);
 
-        RevSDK.getSearchAssistText(SdkTestLocalTrans.this, apiBaseUrl, TestConstants.SDK_TEST_API_KEY, TestConstants.SDK_TEST_APP_ID, input, selectedSourceLangId, new SearchAssistListener() {
+        RevSDK.getSearchAssistText(apiBaseUrl, TestConstants.SDK_TEST_API_KEY, TestConstants.SDK_TEST_APP_ID, input, selectedSourceLangId, new SearchAssistListener() {
             @Override
             public void onResult(int responseCode, String responseJson, String result) {
                 Log.d("TAG", "SEARCH ASSIST : ON RESULT >>>> ");
