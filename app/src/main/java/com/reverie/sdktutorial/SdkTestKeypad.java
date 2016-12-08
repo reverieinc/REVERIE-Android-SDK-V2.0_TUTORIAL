@@ -17,8 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.reverie.manager.DownloadCompleteListener;
+import com.reverie.manager.LangResourceInitCompleteListener;
 import com.reverie.manager.RevError;
 import com.reverie.manager.RevSDK;
+import com.reverie.manager.RevStatus;
 import com.reverie.manager.ValidationCompleteListener;
 import com.sdktest.R;
 
@@ -102,49 +104,36 @@ public class SdkTestKeypad extends Activity {
         pb1.setVisibility(View.VISIBLE);
 
         /**
-         *  downloadResources API downloads resources, if required (font and dictionary) from Reverie Server for requested Langauge.
-         *  API : downloadResources
-         *  Params : Resource Doenload Base Api Url, Langauge id, DownloadCompleteListener callback
-         *  Callback : onDownloadComplete (int language code, boolean Font download status, boolean Dictionary download status, RevError Error Message
+         *  initLangResources API downloads resources, if NOT downloaded already (font and dictionary) from Reverie Server for requested Langauge, And initialize resources
+         *  API : initLangResources
+         *  Params : Resource Doenload Base Api Url, Langauge id, LangResourceInitCompleteListener callback
+         *  Callback : onLangResourceInitComplete (int language code, RevStatus status)
          */
-        RevSDK.downloadResources(TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedLangId, new DownloadCompleteListener() {
+        RevSDK.initLangResources(TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, langId, new LangResourceInitCompleteListener() {
             @Override
-            public void onDownloadComplete(int langCode, boolean font, boolean dict, RevError status) {
+            public void onLangResourceInitComplete(int i, RevStatus revStatus) {
 
-                Log.d("TAG", "DOWNLOAD COMPLETE KEYPAD:  "+ langCode + " , " + font + ", " + dict + ", " + status.getErrorMessage());
+                Log.d("TAG", "INIT RESOURCE COMPLETE:  Lang code = " + i + " , Status = " + revStatus.getStatusMessage());
+                statusDownlaodResourceTV.setText(revStatus.getStatusMessage());
+                pb1.setVisibility(View.INVISIBLE);
 
-                String displayMsg =  "Language Code: " + langCode + "\n"
-                        + "Font download status : " + font + "\n"
-                        + "Dictionary download status :" + dict + "\n"
-                        + "Status Message : " + status.getErrorMessage();
-
-                pb1.setVisibility(View.GONE);
-                statusDownlaodResourceTV.setText(displayMsg);
-                statusDownlaodResourceButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        downloadStatusRL.setVisibility(View.GONE);
-
-                        /**
-                         *  On getting callback onDownloadComplete, call init keypad API.
-                         *  (If in above said callback 2nd parameter (boolean font) is false, appearance and size of the keyboard fonts may differ)
-                         *  (If in above said callback 3rd parameter (boolean dict) is false, Suggestions may not display for input characters)
-                         */
+                if (revStatus.getStatusCode() == RevStatus.SUCCESS) {
+                    /**
+                     *  InitKeypad API parse the provided Activity and identify Custom component "RevEditText" to avail kepad.
+                     *  API : initKeypad
+                     *  Params : int Langauge id
+                     *  Return : boolean Status
+                     */
+                    boolean status = RevSDK.initKeypad(SdkTestKeypad.this, selectedLangId);
+                }
+            }
+        });
 
 
-                        /**
-                         *  InitKeypad API parse the provided Activity and identify Custom component "RevEditText" to avail kepad.
-                         *  API : initKeypad
-                         *  Params : int Langauge id
-                         *  Return : boolean Status
-                         */
-                        boolean status = RevSDK.initKeypad(SdkTestKeypad.this, selectedLangId);
-                    }
-                });
-
-
-
-
+        statusDownlaodResourceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                downloadStatusRL.setVisibility(View.GONE);
             }
         });
     }

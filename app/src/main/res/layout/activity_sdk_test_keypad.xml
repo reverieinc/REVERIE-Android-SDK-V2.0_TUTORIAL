@@ -118,7 +118,7 @@
                         android:padding="10dp"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:text="Download Language Resource"/>
+                        android:text="Init Language Resource"/>
 
                     <ProgressBar
                         android:id="@+id/pb1"

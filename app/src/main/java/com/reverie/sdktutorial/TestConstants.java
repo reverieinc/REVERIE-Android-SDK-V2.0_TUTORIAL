@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class TestConstants {
 
 
-    public static final String SDK_TEST_APP_ID = "com.XXXX";
-    public static final String SDK_TEST_API_KEY = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX";
+    public static final String SDK_TEST_APP_ID = "com.XXXXX";
+    public static final String SDK_TEST_API_KEY = "XXXXXXXXXXXXXXXXXX";
 
     public static final String LM_BASE_API_URL = "http://beta.auth.revup.reverieinc.com/apiman-gateway";
     public static final String RESOURCE_DOWNLOAD_BASE_API_URL =  "http://beta.auth.revup.reverieinc.com/apiman-gateway";

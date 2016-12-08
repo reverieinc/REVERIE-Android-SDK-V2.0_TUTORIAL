@@ -25,8 +25,10 @@ import com.reverie.customcomponent.RevTextView;
 import com.reverie.customcomponent.RevToggleButton;
 import com.reverie.lm.LM;
 import com.reverie.manager.DownloadCompleteListener;
+import com.reverie.manager.LangResourceInitCompleteListener;
 import com.reverie.manager.RevError;
 import com.reverie.manager.RevSDK;
+import com.reverie.manager.RevStatus;
 import com.reverie.manager.ValidationCompleteListener;
 import com.sdktest.R;
 
@@ -127,65 +129,32 @@ public class SdkTestUIComponents extends Activity {
     public void onSpinnerLangSelected(int pos) {
         selectedLangId = TestConstants.langIdsArray[pos];
         selectedLangName = TestConstants.langNamesArray[pos];
-        String str = TestConstants.langIdsArray[pos] + " , " + TestConstants.langNamesArray[pos];
-        //Toast.makeText(SdkTestKeypad.this, "Select Lang: " + str , Toast.LENGTH_SHORT).show();
 
-        boolean status = RevSDK.initKeypad(SdkTestUIComponents.this, selectedLangId);
-        if(RevSDK.checkResource( selectedLangId)) {
-            // do nothing, already available
-            Log.d("TAG", "RESOURCE AVAILABLE FOR : " + selectedLangId );
-        }
-        else {
-            showDownloadResourceConfirmDialog();
-        }
-    }
-
-    public void showDownloadResourceConfirmDialog() {
-        new AlertDialog.Builder(SdkTestUIComponents.this)
-                .setTitle("Download Resource")
-                .setMessage("Resource not available for selected Language.")
-                .setPositiveButton("Download", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                        downloadLangresource();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-    }
-
-
-    public void downloadLangresource() {
-        statusDownlaodResourceTV.setText("");
-        downloadStatusRL.setVisibility(View.VISIBLE);
-        pb1.setVisibility(View.VISIBLE);
-
-        RevSDK.downloadResources(TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedLangId, new DownloadCompleteListener() {
+        /**
+         *  initLangResources API downloads resources, if NOT downloaded already (font and dictionary) from Reverie Server for requested Langauge, And initialize resources
+         *  API : initLangResources
+         *  Params : Resource Doenload Base Api Url, Langauge id, LangResourceInitCompleteListener callback
+         *  Callback : onLangResourceInitComplete (int language code, RevStatus status)
+         */
+        RevSDK.initLangResources(TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedLangId, new LangResourceInitCompleteListener() {
             @Override
-            public void onDownloadComplete(int langCode, boolean font, boolean dict, RevError errorMsg) {
-                Log.d("TAG", "DOWNLOAD COMPLETE KEYPAD:  "+ langCode + " , " + font + ", " + dict + ", " + errorMsg.getErrorMessage());
-                pb1.setVisibility(View.GONE);
-                String status =  "Language Code: " + langCode + "\n"
-                        + "Font download status : " + font + "\n"
-                        + "Dictionary download status :" + dict + "\n"
-                        + "Status Message : " + errorMsg.getErrorMessage();
+            public void onLangResourceInitComplete(int i, RevStatus revStatus) {
 
-                statusDownlaodResourceTV.setText(status);
-                statusDownlaodResourceButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        downloadStatusRL.setVisibility(View.GONE);
-                    }
-                });
+                Log.d("TAG", "INIT RESOURCE COMPLETE:  Lang code = " + i + " , Status = " + revStatus.getStatusMessage());
+
+                if (revStatus.getStatusCode() == RevStatus.SUCCESS) {
+                    /**
+                     *  InitKeypad API parse the provided Activity and identify Custom component "RevEditText" to avail kepad.
+                     *  API : initKeypad
+                     *  Params : int Langauge id
+                     *  Return : boolean Status
+                     */
+                    boolean status = RevSDK.initKeypad(SdkTestUIComponents.this, selectedLangId);
+                }
             }
         });
-
     }
+
 
 
     public void resetUIComponents() {

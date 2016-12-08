@@ -19,8 +19,10 @@ import com.reverie.lm.LM;
 import com.reverie.localization.RevLocalization;
 import com.reverie.localization.SimpleLocalizationListener;
 import com.reverie.manager.DownloadCompleteListener;
+import com.reverie.manager.LangResourceInitCompleteListener;
 import com.reverie.manager.RevError;
 import com.reverie.manager.RevSDK;
+import com.reverie.manager.RevStatus;
 import com.reverie.manager.ValidationCompleteListener;
 import com.reverie.search.SearchAssistListener;
 import com.reverie.transliterationsonline.RevTransliterationOnline;
@@ -215,21 +217,29 @@ public class SdkTestLocalTrans extends Activity {
         selectedSourceLangId = TestConstants.langIdsArray[pos];
         selectedSourceLangName = TestConstants.langNamesArray[pos];
 
-        boolean status = RevSDK.initKeypad(SdkTestLocalTrans.this, selectedSourceLangId);
-        if(RevSDK.checkResource(selectedSourceLangId)) {
-            // do nothing, already available
-            // Log.d("TAG", "RESOURCE AVAILABLE FOR : " + selectedSourceLangId );
-        }
-        else {
-            RevSDK.downloadResources(TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedSourceLangId, new DownloadCompleteListener() {
-                @Override
-                public void onDownloadComplete(int langCode, boolean font, boolean dict, RevError errorMsg) {
-                    Log.d("TAG", "DOWNLOAD COMPLETE :  "+ langCode + " , " + font + ", " + dict + ", " + errorMsg.getErrorMessage());
+        /**
+         *  initLangResources API downloads resources, if NOT downloaded already (font and dictionary) from Reverie Server for requested Langauge, And initialize resources
+         *  API : initLangResources
+         *  Params : Resource Doenload Base Api Url, Langauge id, LangResourceInitCompleteListener callback
+         *  Callback : onLangResourceInitComplete (int language code, RevStatus status)
+         */
+        RevSDK.initLangResources(TestConstants.RESOURCE_DOWNLOAD_BASE_API_URL, selectedSourceLangId, new LangResourceInitCompleteListener() {
+            @Override
+            public void onLangResourceInitComplete(int i, RevStatus revStatus) {
 
+                Log.d("TAG", "INIT RESOURCE COMPLETE:  Lang code = " + i + " , Status = " + revStatus.getStatusMessage());
+
+                if (revStatus.getStatusCode() == RevStatus.SUCCESS) {
+                    /**
+                     *  InitKeypad API parse the provided Activity and identify Custom component "RevEditText" to avail kepad.
+                     *  API : initKeypad
+                     *  Params : int Langauge id
+                     *  Return : boolean Status
+                     */
+                    boolean status = RevSDK.initKeypad(SdkTestLocalTrans.this, selectedSourceLangId);
                 }
-            });
-
-        }
+            }
+        });
     }
 
     public void onSpinnerTargetLangSelected(int pos) {
