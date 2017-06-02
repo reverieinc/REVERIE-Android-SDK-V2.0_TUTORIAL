@@ -16,9 +16,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.reverie.manager.DownloadCompleteListener;
 import com.reverie.manager.LangResourceInitCompleteListener;
-import com.reverie.manager.RevError;
 import com.reverie.manager.RevSDK;
 import com.reverie.manager.RevStatus;
 import com.reverie.manager.ValidationCompleteListener;

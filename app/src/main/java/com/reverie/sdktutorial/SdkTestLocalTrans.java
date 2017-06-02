@@ -18,9 +18,7 @@ import com.reverie.customcomponent.RevEditText;
 import com.reverie.lm.LM;
 import com.reverie.localization.RevLocalization;
 import com.reverie.localization.SimpleLocalizationListener;
-import com.reverie.manager.DownloadCompleteListener;
 import com.reverie.manager.LangResourceInitCompleteListener;
-import com.reverie.manager.RevError;
 import com.reverie.manager.RevSDK;
 import com.reverie.manager.RevStatus;
 import com.reverie.manager.ValidationCompleteListener;
@@ -128,7 +126,7 @@ public class SdkTestLocalTrans extends Activity {
     }
 
     public void initTransTypeSpinner() {
-        final String[] transTypeArray = new String[]{"Localisation", "Transliteration", "Suggestion", "Search"};
+        final String[] transTypeArray = new String[]{"Localisation", "Transliteration", "Suggestion"/*, "Search"*/};
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,   android.R.layout.simple_spinner_item, transTypeArray);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         transTypeSpinner.setAdapter(spinnerArrayAdapter);
@@ -266,7 +264,7 @@ public class SdkTestLocalTrans extends Activity {
             }
             else if(selectedTransTypeId == 4) {
                 // SEARCH ASSIST
-                callSearchAssistApi(inputText, TestConstants.REVUP_SEARCH_API_ENDPOINT);
+                //callSearchAssistApi(inputText, TestConstants.REVUP_SEARCH_API_ENDPOINT);
             }
         }
         else {
@@ -386,13 +384,13 @@ public class SdkTestLocalTrans extends Activity {
         });
     }
 
-
-    /**
+/*
+    *//**
      *  callSearchAssistApi API returns English text result for input localized text via Reverie Server Network call
      *  API : getSearchAssistText
      *  Params : Activity, Search Assist API Url(String), API key(String), App Id(String), Input text(String), Source Langauge Id (int), SearchAssistListener Callback
      *  Callback : onResult(int responseCode, String responseJson, String result)
-     */
+     *//*
     public void callSearchAssistApi(String input, String apiBaseUrl) {
         Log.d("TAG", "SEARCH ASSIST: API CALLING >>>> ");
         resultLocalTrans = "";
@@ -413,7 +411,7 @@ public class SdkTestLocalTrans extends Activity {
                         "RESULT : " + result);
             }
         });
-    }
+    }*/
 
 
 }

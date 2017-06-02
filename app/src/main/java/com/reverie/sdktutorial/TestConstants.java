@@ -8,14 +8,14 @@ import java.util.ArrayList;
 public class TestConstants {
 
 
-    public static final String SDK_TEST_APP_ID = "com.XXXXX";
-    public static final String SDK_TEST_API_KEY = "XXXXXXXXXXXXXXXXXX";
+    public static final String SDK_TEST_APP_ID = "xxxxxxxxxxxxxxxxxxx";
+    public static final String SDK_TEST_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
-    public static final String LM_BASE_API_URL = "http://beta.auth.revup.reverieinc.com/apiman-gateway";
-    public static final String RESOURCE_DOWNLOAD_BASE_API_URL =  "http://beta.auth.revup.reverieinc.com/apiman-gateway";
+    public static final String LM_BASE_API_URL = "https://api-gw.revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk";
+    public static final String RESOURCE_DOWNLOAD_BASE_API_URL =  "https://api-gw.revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk";
 
-    public static final String REVUP_LOCALIZATION_API_ENDPOINT = "https://api-revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk/localization/1.0";
-    public static final String REVUP_TRANSLITERATION_API_ENDPOINT = "https://api-revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk/transliteration/1.0";
+    public static final String REVUP_LOCALIZATION_API_ENDPOINT = "https://api-gw.revup.reverieinc.com/apiman-gateway/xxxxxxx/localization/1.0";
+    public static final String REVUP_TRANSLITERATION_API_ENDPOINT = "https://api-gw.revup.reverieinc.com/apiman-gateway/xxxxxxxx/transliteration/1.0";
     public static final String REVUP_SEARCH_API_ENDPOINT = "https://api-revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk/search/1.0";
 
 
