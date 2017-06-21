@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Android-SDK-V2.0-TUTORIAL.iml" filepath="$PROJECT_DIR$/Android-SDK-V2.0-TUTORIAL.iml" />
       <module fileurl="file://$PROJECT_DIR$/REVERIE-Android-SDK-V2.0_TUTORIAL.iml" filepath="$PROJECT_DIR$/REVERIE-Android-SDK-V2.0_TUTORIAL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/REVERIE-Android-SDK-V2.0_TUTORIAL.iml" filepath="$PROJECT_DIR$/REVERIE-Android-SDK-V2.0_TUTORIAL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

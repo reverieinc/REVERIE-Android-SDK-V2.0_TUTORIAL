@@ -26,7 +26,7 @@ import com.sdktest.R;
 public class SdkTestLaunchActivity extends Activity {
 
     private static final int READ_PHONE_STATE_REQUEST_CODE = 101;
-    private TextView keypadLinkTV, uiLinkTV, transLocalLinkTV;
+    private TextView keypadLinkTV, uiLinkTV;
     private RelativeLayout keypadStatusRL;
     private TextView statusKeypadLmTV;
     private Button statusKeypadLmButton;
@@ -41,7 +41,6 @@ public class SdkTestLaunchActivity extends Activity {
 
         keypadLinkTV = (TextView) findViewById(R.id.keypadLinkTV);
         uiLinkTV = (TextView) findViewById(R.id.uiLinkTV);
-        transLocalLinkTV = (TextView) findViewById(R.id.transLocalLinkTV);
         keypadStatusRL = (RelativeLayout) findViewById(R.id.keypadStatusRL);
         statusKeypadLmTV = (TextView) findViewById(R.id.statusKeypadLmTV);
         statusKeypadLmButton = (Button) findViewById(R.id.statusKeypadLmButton);
@@ -84,13 +83,6 @@ public class SdkTestLaunchActivity extends Activity {
         });
 
 
-        transLocalLinkTV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SdkTestLaunchActivity.this, SdkTestLocalTrans.class);
-                startActivity(intent);
-            }
-        });
     }
 
 
