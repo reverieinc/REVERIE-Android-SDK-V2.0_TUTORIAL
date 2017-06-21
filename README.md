@@ -1,7 +1,7 @@
 # Reverie Android SDK API
 
 
-This project demonstrates using of Reverie Android SDK API in your application.
+This project demonstrates using of Reverie Android SDK in your application.
 
 Steps
 - Import this project to your Android Studio workspace. 
@@ -12,14 +12,13 @@ Steps
 public static final String SDK_TEST_APP_ID = "[your app id]";
 public static final String SDK_TEST_API_KEY = "[Your API key]";
 
-public static final String REVUP_LOCALIZATION_API_ENDPOINT = "https://api-gw.revup.reverieinc.com/apiman-gateway/[YourOrgName]/localization/1.0";
-public static final String REVUP_TRANSLITERATION_API_ENDPOINT = "https://api-gw.revup.reverieinc.com/apiman-gateway/[YourOrgName]/transliteration/1.0";
+public static final String LM_BASE_API_URL = "https://api-gw.revup.reverieinc.com/apiman-gateway/[YourOrgName]";
+public static final String RESOURCE_DOWNLOAD_BASE_API_URL = "https://api-gw.revup.reverieinc.com/apiman-gateway/[YourOrgName]";
 
 Terminology:
 - `SDK_TEST_APP_ID` - is the package name of your application.
 - `SDK_TEST_API_KEY` - is the apikey for you once you register through RevUP.
-- `REVUP_LOCALIZATION_API_ENDPOINT` - Endpoint to Reverie Localization server
-- `REVUP_TRANSLITERATION_API_ENDPOINT` - Endpoint to Reverie Transliteration server.
+- `LM_BASE_API_URL` - Endpoint to Reverie license validation
 
 Once these variables are updated run the project, and you are good to go.
 
