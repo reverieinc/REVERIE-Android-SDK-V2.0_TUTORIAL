@@ -12,8 +12,8 @@ Steps
 public static final String SDK_TEST_APP_ID = "[your app id]";
 public static final String SDK_TEST_API_KEY = "[Your API key]";
 
-public static final String LM_BASE_API_URL = "https://api-gw.revup.reverieinc.com/apiman-gateway/[YourOrgName]";
-public static final String RESOURCE_DOWNLOAD_BASE_API_URL = "https://api-gw.revup.reverieinc.com/apiman-gateway/[YourOrgName]";
+public static final String LM_BASE_API_URL = "https://api-gw.revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk";
+public static final String RESOURCE_DOWNLOAD_BASE_API_URL = "https://api-gw.revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk";
 
 Terminology:
 - `SDK_TEST_APP_ID` - is the package name of your application.
