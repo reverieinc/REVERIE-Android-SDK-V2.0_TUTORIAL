@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class TestConstants {
 
 
-    public static final String SDK_TEST_APP_ID = "XXXXXXXXXXXXX";
+    public static final String SDK_TEST_APP_ID = "XXXXXXXXXXX";
     public static final String SDK_TEST_API_KEY = "XXXXXXXXXXXXX";
 
     public static final String LM_BASE_API_URL = "https://api-gw.revup.reverieinc.com/apiman-gateway/ReverieMobilitySdk";
